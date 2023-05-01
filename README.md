@@ -3,9 +3,9 @@ Website that is mainly contained with graphics mainly powered by Typescript &amp
 
 # Building & Running The Project
 I worked on this in VSC as my editor and it requires the following installed:
-- nodejs / npm 
-- vite
-- threejs
+- nodejs / npm (https://nodejs.org/en)
+- vite (install globally by doing **npm install -g vite**)
+- threejs & gsap (**npm i three gsap**)
 
 after having all requirements downloaded to run it on a localhost web do: 
 npm run dev (make sure you are in the repo when you do it or just do it in the vsc terminal)
@@ -14,7 +14,7 @@ npm run dev (make sure you are in the repo when you do it or just do it in the v
 DOING THIS TILL THE END WILL GIVE YOU AN IMAGE LIKE THIS.  
 <img width="500" height="500" alt="Screenshot 2023-05-01 at 1 16 08 PM" src="https://user-images.githubusercontent.com/52252068/235433794-7270e760-57e5-4f8f-ae53-7cbdda5ea241.png">  
 
-get npm first: https://nodejs.org/en. 
+get npm first: https://nodejs.org/en  
 
 do "**npm --version**" to see if installed. 
 
