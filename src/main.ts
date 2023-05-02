@@ -3,7 +3,7 @@ import "./style.css"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
 import { gsap } from "gsap";
-import { normalize } from 'three/examples/jsm/nodes/Nodes.js';
+import { normalize, vec3 } from 'three/examples/jsm/nodes/Nodes.js';
 
 // Create a scene
 const scene = new THREE.Scene();
@@ -97,10 +97,13 @@ let currentRot = {
   x: 0,
   y: 0
 };
-let speed:number = 1;
+let speed:number = 10;
+const clock = new THREE.Clock();
+let deltaTime:number = 0;
 
 // Render the scene & Update Loop
 function Update() {
+  deltaTime = clock.getDelta();
   requestAnimationFrame(Update);
   CustomControlKeys();
 
@@ -126,35 +129,35 @@ function CustomControlKeys()
   {
     if(isShiftLKeyPressed)
     {
-      speed = 3;
+      speed = 20;
     }
     else
     {
-      speed = 1;
+      speed = 10;
     }
     if(isWKeyPressed)
     {
-      camera.translateZ(-0.1 * speed);
+      camera.translateZ(-1 * speed * deltaTime);
     }
     if(isAKeyPressed)
     {
-      camera.translateX(-0.1 * speed);
+      camera.translateX(-1 * speed * deltaTime);
     }
     if(isSKeyPressed)
     {
-      camera.translateZ(+0.1 * speed);
+      camera.translateZ(+1 * speed * deltaTime);
     }
     if(isDKeyPressed)
     {
-      camera.translateX(+0.1 * speed);
+      camera.translateX(+1 * speed * deltaTime);
     }
     if(isCTRLLKeyPressed)
     {
-      camera.translateY(-0.1 * (speed * 0.5));
+      camera.translateY(-1 * (speed * 0.5 * deltaTime));
     }
     if(isSpaceKeyPressed)
     {
-      camera.translateY(+0.1 * (speed * 0.5));
+      camera.translateY(+1 * (speed * 0.5 * deltaTime));
     }
 
     
