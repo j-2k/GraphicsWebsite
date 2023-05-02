@@ -7,6 +7,7 @@ let isDKeyPressed:boolean = false;
 let isCTRLLKeyPressed:boolean = false;
 let isSpaceKeyPressed:boolean = false;
 let mousePressed:boolean = false;
+let isShiftLKeyPressed:boolean = false;
 
   document.addEventListener('keydown', (event) => {
     // Check if the key is the one you want to detect
@@ -27,6 +28,9 @@ let mousePressed:boolean = false;
     }
     if (event.code === 'Space') {
       isSpaceKeyPressed = true;
+    }
+    if (event.code === 'ShiftLeft') {
+      isShiftLKeyPressed = true;
     }
   });
   
@@ -49,6 +53,9 @@ let mousePressed:boolean = false;
     }
     if (event.code === 'Space') {
       isSpaceKeyPressed = false;
+    }
+    if (event.code === 'ShiftLeft') {
+      isShiftLKeyPressed = false;
     }
   });
 
@@ -77,8 +84,9 @@ let mousePressed:boolean = false;
   window.addEventListener("mouseup", () => (
     mousePressed = false,
     customMouseEvents.endX = customMouseEvents.x,
-    customMouseEvents.endY = customMouseEvents.y,
+    customMouseEvents.endY = customMouseEvents.y
     ))
+
 
   
 
@@ -90,5 +98,6 @@ export {
     mousePressed,
     customMouseEvents,
     isCTRLLKeyPressed,
-    isSpaceKeyPressed
+    isSpaceKeyPressed,
+    isShiftLKeyPressed
 }
