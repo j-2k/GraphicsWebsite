@@ -38,6 +38,7 @@ renderer.setSize(sizes.width,sizes.height);
 document.body.appendChild(renderer.domElement);
 
 // Create a sphere
+const colorChanging = new THREE.Color(1,0,1);
 const geometry = new THREE.SphereGeometry(1,16,16);
 const cubeGeometry = new THREE.BoxGeometry(150,1,150);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
@@ -100,13 +101,35 @@ let currentRot = {
 let speed:number = 10;
 const clock = new THREE.Clock();
 let deltaTime:number = 0;
+let a:number = 0;
+const fpsText = document.getElementById("FPSid")!;
+let fps:number = 0;
+function FPSHandler()
+{
+  //fps++;
+  fps = 1/deltaTime;
+  fpsText.innerText = `FPS: ${fps.toFixed(0)}`;
+}
 
 // Render the scene & Update Loop
 function Update() {
   deltaTime = clock.getDelta();
   requestAnimationFrame(Update);
   CustomControlKeys();
+    
+  
 
+  if(clock.elapsedTime > 0.5 + a)
+  {
+    FPSHandler();
+    material.color.setRGB(
+      THREE.MathUtils.randFloat(0,1),
+      1,
+      THREE.MathUtils.randFloat(0,1)
+      );
+    a = clock.elapsedTime;
+  }
+  
 
 
   // Rotate the sphere with the wireframe
@@ -168,7 +191,7 @@ function CustomControlKeys()
     camera.rotation.x = (currentRot.y + lastRot.y);
     camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x,-(Math.PI * 0.5),Math.PI * 0.5);
 
-    console.log(Math.round(THREE.MathUtils.RAD2DEG * camera.rotation.x));
+    //console.log(Math.round(THREE.MathUtils.RAD2DEG * camera.rotation.x));
   }
 }
 
