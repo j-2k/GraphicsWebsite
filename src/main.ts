@@ -19,6 +19,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1, // Near clipping plane
   1000 // Far clipping plane
 );
+
+//https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
+//https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
 camera.rotation.order = 'YXZ'
 
 // Set the camera position
