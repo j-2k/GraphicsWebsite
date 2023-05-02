@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import "./style.css"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed } from './keycodes.ts';
+import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents } from './keycodes.ts';
 import { gsap } from "gsap";
+import { normalize } from 'three/examples/jsm/nodes/Nodes.js';
 
 // Create a scene
 const scene = new THREE.Scene();
@@ -37,6 +38,12 @@ const geometry = new THREE.SphereGeometry(1,16,16);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
 const sphereMesh = new THREE.Mesh(geometry, material);
 scene.add(sphereMesh);
+
+const sphereMeshL = new THREE.Mesh(geometry, material);
+const sphereMeshR = new THREE.Mesh(geometry, material);
+sphereMeshL.position.x = 10;
+sphereMeshR.position.x = -10;
+scene.add(sphereMeshL,sphereMeshR);
 
 //Light
 const light = new THREE.PointLight(0xffffff,1,100);
@@ -74,15 +81,20 @@ loop()
 
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
-
+let lastRot = {
+  x: 0,
+  y: 0
+};
+let currentRot = {
+  x: 0,
+  y: 0
+};
 // Render the scene & Update Loop
 function animate() {
   requestAnimationFrame(animate);
   CustomControlKeys();
 
-  
-  
-  
+
 
   // Rotate the sphere with the wireframe
   sphereMesh.rotation.x += 0.01;
@@ -95,31 +107,40 @@ function animate() {
 }
 animate();
 
+
+
+
 function CustomControlKeys()
 {
-  if(isWKeyPressed)
-  {
-    camera.position.z -= 0.1;
-  }
-  if(isAKeyPressed)
-  {
-    camera.position.x -= 0.1;
-  }
-  if(isSKeyPressed)
-  {
-    camera.position.z += 0.1;
-  }
-  if(isDKeyPressed)
-  {
-    camera.position.x += 0.1;
-  }
-
   if(mousePressed)
   {
-    camera.rotation.y += 0.1;
+    if(isWKeyPressed)
+    {
+      camera.translateZ(-0.1);
+    }
+    if(isAKeyPressed)
+    {
+      camera.translateX(-0.1);
+    }
+    if(isSKeyPressed)
+    {
+      camera.translateZ(+0.1);
+    }
+    if(isDKeyPressed)
+    {
+      camera.translateX(+0.1);
+    }
+
+    currentRot.x = ((customMouseEvents.x - customMouseEvents.startX)*0.001);
+    currentRot.y = ((customMouseEvents.y - customMouseEvents.startY)*0.001);
+    camera.rotation.y = currentRot.x + lastRot.x;
+    camera.rotation.x = currentRot.y + lastRot.y;
   }
-  
-  
 }
+
+window.addEventListener("mouseup", () => (
+  lastRot.x = camera.rotation.y,
+  lastRot.y = camera.rotation.x
+  ))
 
 //renderer.render(scene,camera);
