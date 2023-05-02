@@ -1,4 +1,3 @@
-import { bool, float } from "three/examples/jsm/nodes/Nodes.js";
 
 let isWKeyPressed:boolean = false;
 let isAKeyPressed:boolean = false;

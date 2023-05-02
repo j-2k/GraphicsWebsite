@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import "./style.css"
-//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
-//import { gsap } from "gsap";
-//import { normalize, vec3 } from 'three/examples/jsm/nodes/Nodes.js';
 import { CustomWaterPlane } from './WaterShader.ts';
+//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+//import { gsap } from "gsap";
 
 // Create a scene
 const scene = new THREE.Scene();
