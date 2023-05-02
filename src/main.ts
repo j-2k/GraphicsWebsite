@@ -35,15 +35,18 @@ document.body.appendChild(renderer.domElement);
 
 // Create a sphere
 const geometry = new THREE.SphereGeometry(1,16,16);
+const cubeGeometry = new THREE.BoxGeometry(100,1,100);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
 const sphereMesh = new THREE.Mesh(geometry, material);
 scene.add(sphereMesh);
 
 const sphereMeshL = new THREE.Mesh(geometry, material);
 const sphereMeshR = new THREE.Mesh(geometry, material);
+const cubeMesh = new THREE.Mesh(cubeGeometry, material);
 sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
-scene.add(sphereMeshL,sphereMeshR);
+cubeMesh.position.y = -20;
+scene.add(sphereMeshL,sphereMeshR,cubeMesh);
 
 //Light
 const light = new THREE.PointLight(0xffffff,1,100);
@@ -135,6 +138,9 @@ function CustomControlKeys()
     currentRot.y = ((customMouseEvents.y - customMouseEvents.startY)*0.001);
     camera.rotation.y = currentRot.x + lastRot.x;
     camera.rotation.x = currentRot.y + lastRot.y;
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x,-Math.PI * 0.25,Math.PI * 0.25);
+
+    console.log(Math.round(THREE.MathUtils.RAD2DEG * camera.rotation.x));
   }
 }
 
