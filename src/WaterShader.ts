@@ -10,13 +10,21 @@ void main() {
 const fragmentShader = `
 //ALL INSIDE THE FRAGMENT SHADER
 void main() {
-  gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+  gl_FragColor = vec4(0.0, 0.0, 1.0, 0.25f);
 }
 `;
 
 const WaterShaderMaterial = new THREE.ShaderMaterial({
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    wireframe: false,
+    blending: THREE.AdditiveBlending,
+    side: THREE.FrontSide,
+    transparent: true
+
+
+    
+
 });
 
 function CustomWaterPlane()
