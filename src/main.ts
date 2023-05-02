@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import "./style.css"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents } from './keycodes.ts';
+import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed } from './keycodes.ts';
 import { gsap } from "gsap";
 import { normalize } from 'three/examples/jsm/nodes/Nodes.js';
 
@@ -19,6 +19,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1, // Near clipping plane
   1000 // Far clipping plane
 );
+camera.rotation.order = 'YXZ'
 
 // Set the camera position
 camera.position.z = 5;
@@ -47,6 +48,7 @@ sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
 cubeMesh.position.y = -20;
 scene.add(sphereMeshL,sphereMeshR,cubeMesh);
+
 
 //Light
 const light = new THREE.PointLight(0xffffff,1,100);
@@ -133,12 +135,20 @@ function CustomControlKeys()
     {
       camera.translateX(+0.1);
     }
+    if(isCTRLLKeyPressed)
+    {
+      camera.translateY(-0.1);
+    }
+    if(isSpaceKeyPressed)
+    {
+      camera.translateY(+0.1);
+    }
 
-    currentRot.x = ((customMouseEvents.x - customMouseEvents.startX)*0.001);
-    currentRot.y = ((customMouseEvents.y - customMouseEvents.startY)*0.001);
-    camera.rotation.y = currentRot.x + lastRot.x;
-    camera.rotation.x = currentRot.y + lastRot.y;
-    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x,-Math.PI * 0.25,Math.PI * 0.25);
+    currentRot.x = -((customMouseEvents.x - customMouseEvents.startX)*0.001);
+    currentRot.y = -((customMouseEvents.y - customMouseEvents.startY)*0.001);
+    camera.rotation.y = (currentRot.x + lastRot.x);
+    camera.rotation.x = (currentRot.y + lastRot.y);
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x,-(Math.PI * 0.5),Math.PI * 0.5);
 
     console.log(Math.round(THREE.MathUtils.RAD2DEG * camera.rotation.x));
   }

@@ -4,6 +4,8 @@ let isWKeyPressed:boolean = false;
 let isAKeyPressed:boolean = false;
 let isSKeyPressed:boolean = false;
 let isDKeyPressed:boolean = false;
+let isCTRLLKeyPressed:boolean = false;
+let isSpaceKeyPressed:boolean = false;
 let mousePressed:boolean = false;
 
   document.addEventListener('keydown', (event) => {
@@ -20,6 +22,12 @@ let mousePressed:boolean = false;
     if (event.code === 'KeyD') {
         isDKeyPressed = true;
     }
+    if (event.code === 'ControlLeft') {
+      isCTRLLKeyPressed = true;
+    }
+    if (event.code === 'Space') {
+      isSpaceKeyPressed = true;
+    }
   });
   
   document.addEventListener('keyup', (event) => {
@@ -35,6 +43,12 @@ let mousePressed:boolean = false;
     }
     if (event.code === 'KeyD') {
         isDKeyPressed = false;
+    }
+    if (event.code === 'ControlLeft') {
+      isCTRLLKeyPressed = false;
+    }
+    if (event.code === 'Space') {
+      isSpaceKeyPressed = false;
     }
   });
 
@@ -74,5 +88,7 @@ export {
     isSKeyPressed,
     isDKeyPressed,
     mousePressed,
-    customMouseEvents
+    customMouseEvents,
+    isCTRLLKeyPressed,
+    isSpaceKeyPressed
 }
