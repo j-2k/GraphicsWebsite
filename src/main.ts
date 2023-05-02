@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import "./style.css"
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
-import { gsap } from "gsap";
-import { normalize, vec3 } from 'three/examples/jsm/nodes/Nodes.js';
+//import { gsap } from "gsap";
+//import { normalize, vec3 } from 'three/examples/jsm/nodes/Nodes.js';
+import { CustomWaterPlane } from './WaterShader.ts';
 
 // Create a scene
 const scene = new THREE.Scene();
@@ -38,7 +39,6 @@ renderer.setSize(sizes.width,sizes.height);
 document.body.appendChild(renderer.domElement);
 
 // Create a sphere
-const colorChanging = new THREE.Color(1,0,1);
 const geometry = new THREE.SphereGeometry(1,16,16);
 const cubeGeometry = new THREE.BoxGeometry(150,1,150);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
@@ -87,6 +87,9 @@ const loop = () => {
 }
 loop()
 */
+
+//Plane Creation
+scene.add(CustomWaterPlane());
 
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
@@ -201,3 +204,6 @@ window.addEventListener("mouseup", () => (
   ))
 
 //renderer.render(scene,camera);
+export {
+  scene
+}
