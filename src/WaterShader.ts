@@ -29,6 +29,7 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
 
 function CustomWaterPlane()
 {
+    
   const waterPlaneGeo = new THREE.PlaneGeometry(50,50,10,10);
   //const waterPlaneMat = new THREE.MeshToonMaterial();  
   const waterPlaneMesh = new THREE.Mesh(waterPlaneGeo, WaterShaderMaterial);

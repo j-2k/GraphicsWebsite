@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import "./style.css"
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
 import { CustomWaterPlane } from './WaterShader.ts';
+import { CustomSkyboxMesh } from './SkyboxShader.ts';
+
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
 
@@ -43,7 +45,6 @@ const geometry = new THREE.SphereGeometry(1,16,16);
 const cubeGeometry = new THREE.BoxGeometry(150,1,150);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
 const sphereMesh = new THREE.Mesh(geometry, material);
-scene.add(sphereMesh);
 
 const sphereMeshL = new THREE.Mesh(geometry, new THREE.MeshToonMaterial());
 const sphereMeshR = new THREE.Mesh(geometry, material);
@@ -51,7 +52,8 @@ const cubeMesh = new THREE.Mesh(cubeGeometry, material);
 sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
 cubeMesh.position.y = -20;
-scene.add(sphereMeshL,sphereMeshR,cubeMesh);
+//scene.add(sphereMesh);
+//scene.add(sphereMeshL,sphereMeshR,cubeMesh);
 
 
 //Light
@@ -88,8 +90,9 @@ const loop = () => {
 loop()
 */
 
-//Plane Creation
+//ADDING ALL MY SHADERS HERE
 scene.add(CustomWaterPlane());
+scene.add(CustomSkyboxMesh());
 
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
@@ -221,6 +224,8 @@ function CustomControlKeys()
   lastRot.x = camera.rotation.y,
   lastRot.y = camera.rotation.x
   ));
+
+
 
 
 //renderer.render(scene,camera);
