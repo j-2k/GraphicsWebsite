@@ -11,7 +11,8 @@ const sizes = {
   height: window.innerHeight,
   width: window.innerWidth
 }
-
+const worldOrigin = new THREE.Vector3(0,0,0);
+const worldCamOrigin = new THREE.Vector3(0,0,5);
 // Create a camera
 const camera = new THREE.PerspectiveCamera(
   75, // Field of view
@@ -44,7 +45,7 @@ const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
 const sphereMesh = new THREE.Mesh(geometry, material);
 scene.add(sphereMesh);
 
-const sphereMeshL = new THREE.Mesh(geometry, material);
+const sphereMeshL = new THREE.Mesh(geometry, new THREE.MeshToonMaterial());
 const sphereMeshR = new THREE.Mesh(geometry, material);
 const cubeMesh = new THREE.Mesh(cubeGeometry, material);
 sphereMeshL.position.x = 10;
@@ -112,6 +113,8 @@ function FPSHandler()
   fps = 1/deltaTime;
   fpsText.innerText = `FPS: ${fps.toFixed(0)}`;
 }
+
+const titleText = document.querySelector(".title") as HTMLElement;
 
 // Render the scene & Update Loop
 function Update() {
@@ -185,6 +188,23 @@ function CustomControlKeys()
       camera.translateY(+1 * (speed * 0.5 * deltaTime));
     }
 
+
+    
+    if(camera.position.distanceTo(worldCamOrigin) > 3)
+    {
+      
+      titleText.classList.add('fade-out');
+      titleText.classList.remove('fade-in');
+      
+    }
+    else
+    {
+      
+      titleText.classList.remove('fade-out');
+      titleText.classList.add('fade-in');
+      
+    }
+
     
 
     currentRot.x = -((customMouseEvents.x - customMouseEvents.startX)*0.001) * 2;
@@ -197,10 +217,11 @@ function CustomControlKeys()
   }
 }
 
-window.addEventListener("mouseup", () => (
+  window.addEventListener("mouseup", () => (
   lastRot.x = camera.rotation.y,
   lastRot.y = camera.rotation.x
-  ))
+  ));
+
 
 //renderer.render(scene,camera);
 export {
