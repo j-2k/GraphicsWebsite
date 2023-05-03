@@ -4,9 +4,9 @@ const starFunction= `
 float Star(vec2 uv, float flare,float starDown)
 {
     float d = length(uv);
-    float m = .05/d;
+    float m = .01/d;
     
-    //float star = max(1. - abs(uv.x * uv.y) * 1000.,0.);
+    //float star = max(1. - abs(uv.x * uv.y) * 1000. - 0.2,0.);
     //m += star * flare;
     m -= starDown;
     return m;
@@ -43,7 +43,8 @@ const skyboxMaterial = new THREE.ShaderMaterial({
       //gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
       
       vec2 uv = (vUV * 2. - 1.);
-      uv *= 3.;
+      vec2 uvm = uv;
+      uv *= 50.;
       vec3 col = vec3(0);
 
 
@@ -52,11 +53,13 @@ const skyboxMaterial = new THREE.ShaderMaterial({
       uv.xy += time;
 
       vec2 gv = fract(uv) - 0.5;
-      col += Star(gv,1.0,0.25);
+      col += Star(gv,1.0,0.);
       //col.rg += gv;
-      
-      
-     gl_FragColor = vec4(col,1);
+
+      float mask = smoothstep(0.6,0.5,abs(uvm.y)) * 1.;
+
+      gl_FragColor = vec4(col * mask,1);
+     //gl_FragColor = vec4(mask,mask,mask,1);
     }
   `,
   uniforms: {
