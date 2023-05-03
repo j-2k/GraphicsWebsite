@@ -44,22 +44,24 @@ const skyboxMaterial = new THREE.ShaderMaterial({
       
       vec2 uv = (vUV * 2. - 1.);
       vec2 uvm = uv;
-      uv *= 50.;
+      uv *= 10.;
       vec3 col = vec3(0);
 
 
       float d = length(uv);
 
-      uv.xy += time;
+      uv.xy += time*-0.5;
 
       vec2 gv = fract(uv) - 0.5;
       col += Star(gv,1.0,0.);
       //col.rg += gv;
 
       float mask = smoothstep(0.6,0.5,abs(uvm.y)) * 1.;
+      float m2 = sin(length(uvm * uvm * 10. + time*2.));
 
-      gl_FragColor = vec4(col * mask,1);
-     //gl_FragColor = vec4(mask,mask,mask,1);
+      gl_FragColor = vec4(col * (mask * m2),1);
+      //gl_FragColor = vec4(col,1);
+      //gl_FragColor = vec4(vec3(1) * m2 * mask ,1);
     }
   `,
   uniforms: {
