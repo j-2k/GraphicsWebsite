@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import "./style.css"
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
 import { CustomWaterPlane } from './WaterShader.ts';
-import { CustomSkyboxMesh } from './SkyboxShader.ts';
+import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
 
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
@@ -124,9 +124,9 @@ function Update() {
   deltaTime = clock.getDelta();
   requestAnimationFrame(Update);
   CustomControlKeys();
-    
-  
+  skyboxMaterial.uniforms.time.value += 0.01;
 
+  
   if(clock.elapsedTime > 0.5 + a)
   {
     FPSHandler();
