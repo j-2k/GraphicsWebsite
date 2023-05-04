@@ -30,12 +30,14 @@ nav a{
   text-decoration: none;
   color: white;
   font-weight: bold;
+  
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 4rem;
+  user-select: none;
 }
 
 .title {
@@ -44,10 +46,38 @@ nav ul {
     position: absolute;
     font-size: 3rem;
     left: 50%;
-    top: 75%;
-    transform: translate(-50%,-75%);
+    top: 70%;
+    transform: translate(-50%,-70%);
     user-select: none;
 }
+
+.titlebio {
+  color: white;
+  z-index: 2;
+  position: absolute;
+  font-weight: normal;
+  text-align: center;
+  font-size: 1rem;
+  left: 50%;
+  top: 85%;
+  transform: translate(-50%,-85%);
+  user-select: none;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+button {
+  background-color: rgba(100, 100, 100, 0.5);
+  font-size: medium;
+  z-index: 2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  opacity: 1;
+  transform: translate(0%, -25%);
+}
+
 
 .fade-out {
   opacity: 0;
@@ -58,4 +88,3 @@ nav ul {
   opacity: 1;
   transition: opacity 0.25s ease-in-out;
 }
-

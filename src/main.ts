@@ -3,6 +3,7 @@ import "./style.css"
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
 import { CustomWaterPlane } from './WaterShader.ts';
 import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
+import 'three/src/math/MathUtils.js';
 
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
@@ -42,7 +43,7 @@ document.body.appendChild(renderer.domElement);
 
 // Create a sphere
 const geometry = new THREE.SphereGeometry(1,16,16);
-const cubeGeometry = new THREE.BoxGeometry(150,1,150);
+const cubeGeometry = new THREE.BoxGeometry(20,1,20);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
 const sphereMesh = new THREE.Mesh(geometry, material);
 
@@ -52,8 +53,8 @@ const cubeMesh = new THREE.Mesh(cubeGeometry, material);
 sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
 cubeMesh.position.y = -20;
-//scene.add(sphereMesh);
-//scene.add(sphereMeshL,sphereMeshR,cubeMesh);
+scene.add(sphereMesh);
+scene.add(sphereMeshL,sphereMeshR,cubeMesh);
 
 
 //Light
@@ -91,7 +92,7 @@ loop()
 */
 
 //ADDING ALL MY SHADERS HERE
-scene.add(CustomWaterPlane());
+//scene.add(CustomWaterPlane());
 scene.add(CustomSkyboxMesh());
 
 //Controls
@@ -118,7 +119,6 @@ function FPSHandler()
 }
 
 const titleText = document.querySelector(".title") as HTMLElement;
-
 // Render the scene & Update Loop
 function Update() {
   deltaTime = clock.getDelta();
@@ -126,15 +126,23 @@ function Update() {
   CustomControlKeys();
   skyboxMaterial.uniforms.time.value += 0.01;
 
+  material.color.setRGB(
+    THREE.MathUtils.lerp(0,1,sinTime01(2,0.5,1.5)),
+    THREE.MathUtils.lerp(0,1,sinTime01(1.5,0.5,-1.5)),
+    THREE.MathUtils.lerp(0,1,sinTime01(1,0.5,0))
+    );
+  
   
   if(clock.elapsedTime > 0.5 + a)
   {
     FPSHandler();
+    /*
     material.color.setRGB(
       THREE.MathUtils.randFloat(0,1),
       1,
       THREE.MathUtils.randFloat(0,1)
       );
+      */
     a = clock.elapsedTime;
   }
   
@@ -151,8 +159,11 @@ function Update() {
 }
 Update();
 
-
-
+function sinTime01(speed:number, range:number, offset:number):number
+{
+  const sinTime01Final:number = Math.sin(clock.elapsedTime*speed + offset) * range + range;
+  return sinTime01Final;
+}
 
 function CustomControlKeys()
 {
@@ -225,7 +236,42 @@ function CustomControlKeys()
   lastRot.y = camera.rotation.x
   ));
 
+  let isShowingBio:boolean = true;
+  const exploreText = document.getElementById("clickable-text")as HTMLElement;
+  const hiddenText = document.getElementById("hidden-text") as HTMLElement;
+  const titleBioText = document.querySelector(".titlebio") as HTMLElement;
+    const uaepstr = "The UAE Pass is your secure digital identity in the United Arab Emirates, and it is the first approved and " +
+    "unified national digital identity for all citizens, residents, and visitors in the United Arab Emirates, which allows you to access the " +
+    "various services provided by the government, semi-governmental and private sector via the Internet, through your login For affiliated sites and " +
+    "applications where you can now digitally sign documents, saving you a lot of time and effort without having to visit service centers";
+  
+    exploreText.addEventListener("click", function() {
+      if(isShowingBio)
+      {
+        fadeOutInText(uaepstr,hiddenText);
+      }
+      else
+      {
+        fadeOutText(uaepstr,hiddenText);
+      }
+      isShowingBio = !isShowingBio;
+  });
 
+  function fadeOutInText(newText:string,textParam:HTMLElement): void {
+    textParam.style.opacity = "0";
+    setTimeout(function() {
+      textParam.textContent = newText;
+      textParam.style.opacity = "1";
+    }, 200);
+  }
+
+  function fadeOutText(newText:string,textParam:HTMLElement): void {
+    textParam.style.opacity = "1";
+    setTimeout(function() {
+      textParam.textContent = newText;
+      textParam.style.opacity = "0";
+    }, 200);
+  }
 
 
 //renderer.render(scene,camera);
