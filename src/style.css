@@ -126,3 +126,9 @@ select {
 option:hover {
   background-color: red;
 }
+
+img {
+  width: 40px;
+  height: 40px;
+  margin-top: -10px;
+}
