@@ -44,7 +44,7 @@ document.body.appendChild(renderer.domElement);
 // Create a sphere
 const geometry = new THREE.SphereGeometry(1,16,16);
 const cubeGeometry = new THREE.BoxGeometry(20,1,20);
-const material = new THREE.MeshPhongMaterial({ color: "#ff00ff" });
+const material = new THREE.MeshPhongMaterial({ color: "#ff00ff", shininess: 200, specular: 0x444444});
 const sphereMesh = new THREE.Mesh(geometry, material);
 
 const sphereMeshL = new THREE.Mesh(geometry, new THREE.MeshToonMaterial());
@@ -52,6 +52,7 @@ const sphereMeshR = new THREE.Mesh(geometry, material);
 const cubeMesh = new THREE.Mesh(cubeGeometry, material);
 sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
+sphereMesh.position.y = 5;
 cubeMesh.position.y = -20;
 scene.add(sphereMesh);
 scene.add(sphereMeshL,sphereMeshR,cubeMesh);
@@ -131,6 +132,7 @@ function Update() {
     THREE.MathUtils.lerp(0,1,sinTime01(1.5,0.5,-1.5)),
     THREE.MathUtils.lerp(0,1,sinTime01(1,0.5,0))
     );
+  sphereMesh.scale.setScalar(sinTime01(1,0.5,0) * 1);
   
   
   if(clock.elapsedTime > 0.5 + a)
