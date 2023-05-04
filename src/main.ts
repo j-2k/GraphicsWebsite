@@ -242,19 +242,16 @@ function CustomControlKeys()
   const exploreText = document.getElementById("clickable-text")as HTMLElement;
   const hiddenText = document.getElementById("hidden-text") as HTMLElement;
   const titleBioText = document.querySelector(".titlebio") as HTMLElement;
-    const uaepstr = "The UAE Pass is your secure digital identity in the United Arab Emirates, and it is the first approved and " +
-    "unified national digital identity for all citizens, residents, and visitors in the United Arab Emirates, which allows you to access the " +
-    "various services provided by the government, semi-governmental and private sector via the Internet, through your login For affiliated sites and " +
-    "applications where you can now digitally sign documents, saving you a lot of time and effort without having to visit service centers";
+    const aboutStr:string = "Hi there! I'm Juma Al Remeithi, a developer that specializes on Games, Websites, & Graphics. I have been playing games for a very long time (over 10k hours in-game time) & decided to make it my passion. My dream is to work in anything graphics related such as Shaders, Graphics Specializations, Rendering Topics, & etc. This is essentially my biggest dream to work & specialize in the graphics space. Check out my github if you're interested in my on-going projects! github.com/j-2k";
   
     exploreText.addEventListener("click", function() {
       if(isShowingBio)
       {
-        fadeOutInText(uaepstr,hiddenText);
+        fadeOutInText(aboutStr,hiddenText);
       }
       else
       {
-        fadeOutText(uaepstr,hiddenText);
+        fadeOutText(aboutStr,hiddenText);
       }
       isShowingBio = !isShowingBio;
   });
