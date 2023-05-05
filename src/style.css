@@ -26,11 +26,11 @@ nav{
   justify-content: space-between;
 
 }
-nav a{
+
+.titlepage{
   text-decoration: none;
-  color: white;
+  color: greenyellow;
   font-weight: bold;
-  
 }
 
 nav ul {
