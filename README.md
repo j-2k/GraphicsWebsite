@@ -1,5 +1,7 @@
 # GraphicsWebsite
-Website that is mainly contained with graphics mainly powered by Typescript &amp; ThreeJS. This is mainly just a fun project to fiddle around with TypeScript &amp; Graphics.
+Website that is mainly contained with graphics mainly powered by Typescript &amp; ThreeJS. This is mainly just a fun project to fiddle around with TypeScript &amp; Graphics.  
+I might make it another portfolio site but im not sure yet.  
+I'm mainly going to use the projects displayed on the [threejs](https://threejs.org/) website for reference.
 
 # Building & Running The Project
 I worked on this in VSC as my editor and it requires the following installed:
