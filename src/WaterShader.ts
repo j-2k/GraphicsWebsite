@@ -3,7 +3,7 @@ import { uniformData } from './main';
 import fragmentShader from './watershaderfiles/fragment.glsl';
 import vertexShader from './watershaderfiles/vertex.glsl';
 
-const pnoiseTex = new THREE.TextureLoader().load("../images/pnoise.png");
+const pnoiseTex = new THREE.TextureLoader().load("../images/voronoi_i.png");
 pnoiseTex.wrapS = THREE.RepeatWrapping;
 pnoiseTex.wrapT = THREE.RepeatWrapping;
 

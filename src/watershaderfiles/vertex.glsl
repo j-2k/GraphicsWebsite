@@ -1,5 +1,5 @@
-export default
-`
+export default`
+
 varying vec2 vUv;
 uniform float u_time;
 
