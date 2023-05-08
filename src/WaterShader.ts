@@ -1,8 +1,10 @@
 import * as THREE from 'three';
+import { uniformData } from './main';
 
 const vertexShader = `
 //ALL INSIDE THE VERTEX SHADER
 varying vec2 vUV;
+uniform float u_time;
 void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     vUV = uv;
@@ -13,8 +15,9 @@ const fragmentShader = `
 //ALL INSIDE THE FRAGMENT SHADER
 
 varying vec2 vUV;
+uniform float u_time;
 void main() {
-  gl_FragColor = vec4(vUV, 0.0, 0.25);
+  gl_FragColor = vec4(vUV, abs(sin(u_time)), 1);
 }
 `;
 
@@ -24,11 +27,10 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
     wireframe: false,
     blending: THREE.AdditiveBlending,
     side: THREE.FrontSide,
-    transparent: true
-
-
-    
-
+    transparent: false,
+    uniforms: {
+        u_time : { value: 0}
+    }
 });
 
 function CustomWaterPlane()
@@ -43,5 +45,6 @@ function CustomWaterPlane()
 }
 
 export {
-    CustomWaterPlane
+    CustomWaterPlane,
+    WaterShaderMaterial
 }

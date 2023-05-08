@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import "./style.css"
 import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
-import { CustomWaterPlane } from './WaterShader.ts';
+import { CustomWaterPlane, WaterShaderMaterial } from './WaterShader.ts';
 import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
 import 'three/src/math/MathUtils.js';
 
@@ -91,10 +91,19 @@ const loop = () => {
 }
 loop()
 */
+const clock = new THREE.Clock();
+const uniformData = {
+  time:{
+    type: 'f',
+    value: clock.getElapsedTime(),
+  },
+};
 
 //ADDING ALL MY SHADERS HERE
-//scene.add(CustomWaterPlane());
+scene.add(CustomWaterPlane());
 scene.add(CustomSkyboxMesh());
+
+
 
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
@@ -107,7 +116,7 @@ let currentRot = {
   y: 0
 };
 let speed:number = 10;
-const clock = new THREE.Clock();
+
 let deltaTime:number = 0;
 let a:number = 0;
 const fpsText = document.getElementById("FPSid")!;
@@ -119,14 +128,15 @@ function FPSHandler()
   fpsText.innerText = `FPS: ${fps.toFixed(0)}`;
 }
 
+
+
 const titleText = document.querySelector(".title") as HTMLElement;
 // Render the scene & Update Loop
 function Update() {
   deltaTime = clock.getDelta();
   requestAnimationFrame(Update);
   CustomControlKeys();
-  skyboxMaterial.uniforms.time.value += 0.01;
-
+  TimeVarForShaders();
   material.color.setRGB(
     THREE.MathUtils.lerp(0,1,sinTime01(2,0.5,1.5)),
     THREE.MathUtils.lerp(0,1,sinTime01(1.5,0.5,-1.5)),
@@ -165,6 +175,13 @@ function sinTime01(speed:number, range:number, offset:number):number
 {
   const sinTime01Final:number = Math.sin(clock.elapsedTime*speed + offset) * range + range;
   return sinTime01Final;
+}
+
+function TimeVarForShaders()
+{
+  uniformData.time.value = clock.getElapsedTime();
+  skyboxMaterial.uniforms.time.value = uniformData.time.value
+  WaterShaderMaterial.uniforms.u_time.value = uniformData.time.value
 }
 
 function CustomControlKeys()
@@ -275,5 +292,6 @@ function CustomControlKeys()
 
 //renderer.render(scene,camera);
 export {
-  scene
+  scene,
+  uniformData
 }
