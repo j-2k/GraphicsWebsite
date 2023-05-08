@@ -6,23 +6,34 @@ import vertexShader from './watershaderfiles/vertex.glsl';
 const pnoiseTex = new THREE.TextureLoader().load("../images/voronoi_i.png");
 pnoiseTex.wrapS = THREE.RepeatWrapping;
 pnoiseTex.wrapT = THREE.RepeatWrapping;
+const distortionTex = new THREE.TextureLoader().load("../images/WaterDistortion.png");
+distortionTex.wrapS = THREE.RepeatWrapping;
+distortionTex.wrapT = THREE.RepeatWrapping;
 
 const WaterShaderMaterial = new THREE.ShaderMaterial({
     uniforms: {
         u_time : { value: 0},
-        texture1: { value: pnoiseTex }
+        texture1: { value: pnoiseTex },
+        distTexture1: {value: distortionTex},
+        w_heightX: { value: 1.2},
+        w_heightY: { value: 1.55}
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     wireframe: false,
-    blending: THREE.AdditiveBlending,
+    blending: THREE.AdditiveBlending,/*
+    blendSrc: THREE.OneMinusSrcAlphaFactor,
+    blendDst: THREE.SrcAlphaFactor,
+    blendSrcAlpha: THREE.OneMinusSrcAlphaFactor,
+    blendDstAlpha: THREE.SrcAlphaFactor,*/
     side: THREE.FrontSide,
-    transparent: false
+    transparent: true,
+    fog: true
 });
 
 function CustomWaterPlane()
 {
-  const waterPlaneGeo = new THREE.PlaneGeometry(50,50,10,10);
+  const waterPlaneGeo = new THREE.PlaneGeometry(100,100,20,20);
   //const waterPlaneMat = new THREE.MeshToonMaterial();  
   const waterPlaneMesh = new THREE.Mesh(waterPlaneGeo, WaterShaderMaterial);
   waterPlaneMesh.position.y = -15;
