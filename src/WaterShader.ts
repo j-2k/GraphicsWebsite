@@ -1,36 +1,58 @@
 import * as THREE from 'three';
 import { uniformData } from './main';
 
+
+
+const pnoiseTex = new THREE.TextureLoader().load("../images/pnoise.png");
+pnoiseTex.wrapS = THREE.RepeatWrapping;
+pnoiseTex.wrapT = THREE.RepeatWrapping;
+
 const vertexShader = `
 //ALL INSIDE THE VERTEX SHADER
-varying vec2 vUV;
+varying vec2 vUv;
 uniform float u_time;
+
 void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    vUV = uv;
+    vUv = uv;
 }
 `;
 
 const fragmentShader = `
 //ALL INSIDE THE FRAGMENT SHADER
 
-varying vec2 vUV;
+uniform sampler2D texture1;
+varying vec2 vUv;
 uniform float u_time;
+
 void main() {
-  gl_FragColor = vec4(vUV, abs(sin(u_time)), 1);
+    vec2 uv = vUv;
+    uv *= 2.0;
+    uv += (u_time);
+    
+    vec4 color = texture2D(texture1, uv);
+
+    if (color.r < 0.5)
+    {
+        discard;
+    }
+
+    gl_FragColor = color;
+    //gl_FragColor = vec4(vUv, abs(sin(u_time)), 1);
 }
 `;
 
 const WaterShaderMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        u_time : { value: 0},
+        texture1: { value: pnoiseTex }
+    },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     wireframe: false,
     blending: THREE.AdditiveBlending,
     side: THREE.FrontSide,
-    transparent: false,
-    uniforms: {
-        u_time : { value: 0}
-    }
+    transparent: false
 });
 
 function CustomWaterPlane()
