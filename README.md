@@ -6,6 +6,7 @@ I'm mainly going to use the projects displayed on the [threejs](https://threejs.
 
 ![May-08-2023 07-53-24](https://user-images.githubusercontent.com/52252068/236730254-c9ba816e-17a9-4e36-9095-236bdf4575db.gif)
 
+![Screenshot 2023-05-09 at 1 59 02 PM](https://user-images.githubusercontent.com/52252068/237062966-52e40ba2-8df1-404a-b00b-1bc82748ef8a.png)
 
 # Building & Running The Project
 I worked on this in VSC as my editor and it requires the following installed:
