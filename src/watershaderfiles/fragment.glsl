@@ -29,14 +29,16 @@ void main() {
         (uv.y + u_time*0.1) + distortSample.y);
     vec3 noiseWater = 1. - texture2D(texture1, noiseUV).xyz;
     vec3 noise = 1. - texture2D(texture1, noiseUV).xyz;
-    float surfaceNoise = noise.x > 0.77 ? 1. : 0.;
+    float surfaceNoise = noise.x > 0.8 ? 1. : 0.;
 
-    float depth = LinearizeDepth(gl_FragCoord.z) / 100.; // divide by far for demonstration
-    gl_FragColor = vec4(vec3(depth), 1.0);
-    //vec3 fc = vec3((noiseWater * s_col) + s_col +(s_col * surfaceNoise));//vec3(noiseWater + surfaceNoise  + color);
+    //float depth = LinearizeDepth(gl_FragCoord.z) / 1000.; // divide by far for demonstration
+    //vec3 waterCol = mix(s_col,d_col,depth);
+    //gl_FragColor = vec4(vec3(waterCol), 1.0);
+    vec3 fc = vec3((noiseWater * 1.)*.1 + mix(s_col,d_col,.5) +(1. * surfaceNoise));//vec3(noiseWater + surfaceNoise  + color);
 
-    //vec4 col = vec4(fc,1.);
-    //gl_FragColor = col;
+
+    vec4 col = vec4(fc,1.);
+    gl_FragColor = col;
     
 }
 /*

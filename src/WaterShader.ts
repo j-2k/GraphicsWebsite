@@ -18,8 +18,8 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
         w_heightX: { value: 1.2},
         w_heightY: { value: 1.55},
         distortionStrength: {value: 0.22},
-        d_col: { value: new THREE.Color(0x990000) },
-        s_col: { value: new THREE.Color(0x0088aa) },
+        d_col: { value: new THREE.Color(0x180099) },
+        s_col: { value: new THREE.Color(0x0033ee) },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
@@ -30,7 +30,7 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
     blendSrcAlpha: THREE.OneMinusSrcAlphaFactor,
     blendDstAlpha: THREE.SrcAlphaFactor,*/
     side: THREE.FrontSide,
-    transparent: true,
+    transparent: false,
     fog: true
 });
 

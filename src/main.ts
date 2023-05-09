@@ -24,13 +24,21 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 );
 
+const camera2 = new THREE.PerspectiveCamera(
+  75, // Field of view
+  sizes.width/sizes.height, // Aspect ratio
+  1, // Near clipping plane
+  1 // Far clipping plane
+);
+
+camera2.position.z = -20;
+
 //https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
 //https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
 camera.rotation.order = 'YXZ'
 
 // Set the camera position
 camera.position.z = 5;
-
 // Create a renderer
 const canvas = document.querySelector(".webgl") as HTMLCanvasElement;
 const renderer = new THREE.WebGLRenderer({canvas});
@@ -46,18 +54,24 @@ const geometry = new THREE.SphereGeometry(1,16,16);
 const cubeGeometry = new THREE.BoxGeometry(50,9,200);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff", shininess: 200, specular: 0x444444});
 const sphereMesh = new THREE.Mesh(geometry, material);
-const material2 = new THREE.MeshPhongMaterial({ color: "#888888"});
+const material2 = new THREE.MeshPhongMaterial({ color: "#00ff55"});
 
-const sphereMeshL = new THREE.Mesh(geometry, new THREE.MeshToonMaterial());
+const sphereMeshL = new THREE.Mesh(geometry, material2);
 const sphereMeshR = new THREE.Mesh(geometry, material);
 const cubeMesh = new THREE.Mesh(cubeGeometry, material2);
-sphereMeshL.position.x = 10;
+sphereMeshL.position.y = -5;
+sphereMeshL.position.z = -1;
 sphereMeshR.position.x = -10;
 sphereMesh.position.y = 5;
 cubeMesh.position.y = -20;
 scene.add(sphereMesh);
 scene.add(sphereMeshL,sphereMeshR,cubeMesh);
-
+const cg2 = new THREE.BoxGeometry(30,30,30);
+const c_dtestm = new THREE.Mesh(cg2, material2);
+c_dtestm.position.y  = -20;
+c_dtestm.position.z  = -20;
+c_dtestm.position.x  = -20;
+scene.add(c_dtestm);
 
 //Light
 const light = new THREE.PointLight(0xffffff,1,100);
@@ -104,6 +118,51 @@ const uniformData = {
 scene.add(CustomWaterPlane());
 scene.add(CustomSkyboxMesh());
 
+//DEPTH TESTING
+//////////////////////////////////
+const depthRenderTarget = new THREE.WebGLRenderTarget(window.innerWidth,window.innerHeight);
+depthRenderTarget.depthTexture = new THREE.DepthTexture(window.innerWidth,window.innerHeight);
+
+const vertexShader = `
+varying vec2 vUv;
+void main() {
+    vec4 pos;
+    pos = vec4(position.x,
+    position.y,
+    position.z,
+     1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * pos;
+    vUv = uv;
+}
+`;
+
+const fragmentShader = `
+#include <packing>
+uniform sampler2D depthTexture;
+varying vec2 vUv;
+void main() {
+float depth = texture2D(depthTexture, vUv).r;
+float viewZ = perspectiveDepthToViewZ(depth, 0.1,10.0);
+float depthFinal = viewZToOrthographicDepth(viewZ,0.1,10.0);
+gl_FragColor = vec4(vec3(1. - depthFinal), 1.);
+}
+`;
+
+const depthMaterial = new THREE.ShaderMaterial({
+uniforms: {
+depthTexture: { value: depthRenderTarget.depthTexture }
+},
+vertexShader: vertexShader,
+fragmentShader: fragmentShader
+});
+
+const pgeo = new THREE.PlaneGeometry(40, 40);
+const dmesh = new THREE.Mesh(pgeo, depthMaterial);
+dmesh.position.z = -50;//-14;
+//mesh.rotation.x = Math.PI * -0.5;
+scene.add(dmesh);
+
+//////////////////////////////////
 
 
 //Controls
@@ -144,8 +203,8 @@ function Update() {
     THREE.MathUtils.lerp(0,1,sinTime01(1,0.5,0))
     );
   sphereMesh.scale.setScalar(sinTime01(1,0.5,0) * 1);
-  
-  
+
+
   if(clock.elapsedTime > 0.5 + a)
   {
     FPSHandler();
@@ -168,7 +227,28 @@ function Update() {
   line.rotation.x += 0.01;
   line.rotation.y += 0.05;
   line.rotation.z += 0.02;
+  
+  renderer.setRenderTarget(depthRenderTarget);
   renderer.render(scene, camera);
+  renderer.setRenderTarget(null);
+  renderer.render(scene, camera);
+
+  /*depth render is still getting errors but works??
+  camera2.position.x = camera.position.x;
+  camera2.position.y = camera.position.y;
+  camera2.position.z = camera.position.z;
+  camera2.rotation.x = camera.rotation.x;
+  camera2.rotation.y = camera.rotation.y;
+  camera2.rotation.z = camera.rotation.z;
+
+
+  renderer.setRenderTarget(depthRenderTarget);
+  renderer.render(scene, camera);
+
+  renderer.setRenderTarget(null);
+  renderer.render(scene, camera);
+  */
+
 }
 Update();
 
