@@ -4,6 +4,7 @@ import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePresse
 import { CustomWaterPlane, WaterShaderMaterial } from './WaterShader.ts';
 import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
 import 'three/src/math/MathUtils.js';
+import { depthRenderTarget, postScene, postCamera } from './depthTarget.ts';
 
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
@@ -24,7 +25,7 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 );
 
-const postCamera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
+
 
 //https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
 //https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
@@ -111,58 +112,6 @@ const uniformData = {
 scene.add(CustomWaterPlane());
 scene.add(CustomSkyboxMesh());
 
-//DEPTH TESTING
-//////////////////////////////////
-const depthRenderTarget = new THREE.WebGLRenderTarget(window.innerWidth,window.innerHeight);
-depthRenderTarget.depthTexture = new THREE.DepthTexture(window.innerWidth,window.innerHeight);
-depthRenderTarget.depthBuffer = true;
-
-const vertexShader = `
-varying vec2 vUv;
-void main() {
-    vec4 pos;
-    pos = vec4(position.x,
-    position.y,
-    position.z,
-     1.0);
-    gl_Position = projectionMatrix * modelViewMatrix * pos;
-    vUv = uv;
-}
-`;
-
-const fragmentShader = `
-#include <packing>
-uniform sampler2D depthTexture;
-uniform sampler2D texture1;
-varying vec2 vUv;
-void main() {
-float depth = texture2D(depthTexture, vUv).r;
-vec3 albedo = texture2D(texture1, vUv).rgb;
-float viewZ = perspectiveDepthToViewZ(depth, 0.1,100.0);
-float depthFinal = viewZToOrthographicDepth(viewZ,0.1,100.0);
-gl_FragColor = vec4(vec3(1. - depthFinal), 1.);
-}
-`;
-
-const depthMaterial = new THREE.ShaderMaterial({
-uniforms: {
-depthTexture: { value: depthRenderTarget.depthTexture },
-texture1: { value: depthRenderTarget.texture}
-},
-vertexShader: vertexShader,
-fragmentShader: fragmentShader
-});
-
-const pgeo = new THREE.PlaneGeometry(2, 2);
-const dmesh = new THREE.Mesh(pgeo, depthMaterial);
-//dmesh.position.z = -50;//-14;
-//mesh.rotation.x = Math.PI * -0.5;
-const postScene = new THREE.Scene();
-postScene.add(dmesh);
-
-//////////////////////////////////
-
-
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
 let lastRot = {
@@ -206,13 +155,6 @@ function Update() {
   if(clock.elapsedTime > 0.5 + a)
   {
     FPSHandler();
-    /*
-    material.color.setRGB(
-      THREE.MathUtils.randFloat(0,1),
-      1,
-      THREE.MathUtils.randFloat(0,1)
-      );
-      */
     a = clock.elapsedTime;
   }
   
@@ -230,7 +172,8 @@ function Update() {
   renderer.render( scene, camera );
 
   renderer.setRenderTarget( null );
-  renderer.render( postScene, postCamera );
+  //renderer.render( scene, camera );
+  renderer.render( postScene, postCamera ); //uncomment this line to see the grayscale
 
 }
 Update();
