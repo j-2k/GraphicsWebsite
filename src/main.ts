@@ -254,14 +254,13 @@ function CustomControlKeys()
   {
     if(isShiftLKeyPressed)
     {
-      
       if(speed<= 200)
       {
-        speed += 100 * deltaTime;
-        if(speed <= 20)
+        if(speed <= 50)
         {
-          speed = 20;
+          speed = 50;
         }
+        speed += 100 * deltaTime;    
       }
     }
     else
