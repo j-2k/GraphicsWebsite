@@ -16,7 +16,10 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
         texture1: { value: pnoiseTex },
         distTexture1: {value: distortionTex},
         w_heightX: { value: 1.2},
-        w_heightY: { value: 1.55}
+        w_heightY: { value: 1.55},
+        distortionStrength: {value: 0.22},
+        d_col: { value: new THREE.Color(0x990000) },
+        s_col: { value: new THREE.Color(0x0088aa) },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,

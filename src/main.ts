@@ -43,13 +43,14 @@ document.body.appendChild(renderer.domElement);
 
 // Create a sphere
 const geometry = new THREE.SphereGeometry(1,16,16);
-const cubeGeometry = new THREE.BoxGeometry(20,1,20);
+const cubeGeometry = new THREE.BoxGeometry(50,9,200);
 const material = new THREE.MeshPhongMaterial({ color: "#ff00ff", shininess: 200, specular: 0x444444});
 const sphereMesh = new THREE.Mesh(geometry, material);
+const material2 = new THREE.MeshPhongMaterial({ color: "#888888"});
 
 const sphereMeshL = new THREE.Mesh(geometry, new THREE.MeshToonMaterial());
 const sphereMeshR = new THREE.Mesh(geometry, material);
-const cubeMesh = new THREE.Mesh(cubeGeometry, material);
+const cubeMesh = new THREE.Mesh(cubeGeometry, material2);
 sphereMeshL.position.x = 10;
 sphereMeshR.position.x = -10;
 sphereMesh.position.y = 5;
@@ -190,7 +191,7 @@ function CustomControlKeys()
   {
     if(isShiftLKeyPressed)
     {
-      speed = 20;
+      speed = 200;
     }
     else
     {
