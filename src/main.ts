@@ -24,14 +24,7 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 );
 
-const camera2 = new THREE.PerspectiveCamera(
-  75, // Field of view
-  sizes.width/sizes.height, // Aspect ratio
-  1, // Near clipping plane
-  1 // Far clipping plane
-);
-
-camera2.position.z = -20;
+const postCamera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 
 //https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
 //https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
@@ -122,6 +115,7 @@ scene.add(CustomSkyboxMesh());
 //////////////////////////////////
 const depthRenderTarget = new THREE.WebGLRenderTarget(window.innerWidth,window.innerHeight);
 depthRenderTarget.depthTexture = new THREE.DepthTexture(window.innerWidth,window.innerHeight);
+depthRenderTarget.depthBuffer = true;
 
 const vertexShader = `
 varying vec2 vUv;
@@ -139,28 +133,32 @@ void main() {
 const fragmentShader = `
 #include <packing>
 uniform sampler2D depthTexture;
+uniform sampler2D texture1;
 varying vec2 vUv;
 void main() {
 float depth = texture2D(depthTexture, vUv).r;
-float viewZ = perspectiveDepthToViewZ(depth, 0.1,10.0);
-float depthFinal = viewZToOrthographicDepth(viewZ,0.1,10.0);
+vec3 albedo = texture2D(texture1, vUv).rgb;
+float viewZ = perspectiveDepthToViewZ(depth, 0.1,100.0);
+float depthFinal = viewZToOrthographicDepth(viewZ,0.1,100.0);
 gl_FragColor = vec4(vec3(1. - depthFinal), 1.);
 }
 `;
 
 const depthMaterial = new THREE.ShaderMaterial({
 uniforms: {
-depthTexture: { value: depthRenderTarget.depthTexture }
+depthTexture: { value: depthRenderTarget.depthTexture },
+texture1: { value: depthRenderTarget.texture}
 },
 vertexShader: vertexShader,
 fragmentShader: fragmentShader
 });
 
-const pgeo = new THREE.PlaneGeometry(40, 40);
+const pgeo = new THREE.PlaneGeometry(2, 2);
 const dmesh = new THREE.Mesh(pgeo, depthMaterial);
-dmesh.position.z = -50;//-14;
+//dmesh.position.z = -50;//-14;
 //mesh.rotation.x = Math.PI * -0.5;
-scene.add(dmesh);
+const postScene = new THREE.Scene();
+postScene.add(dmesh);
 
 //////////////////////////////////
 
@@ -227,27 +225,12 @@ function Update() {
   line.rotation.x += 0.01;
   line.rotation.y += 0.05;
   line.rotation.z += 0.02;
-  
-  renderer.setRenderTarget(depthRenderTarget);
-  renderer.render(scene, camera);
-  renderer.setRenderTarget(null);
-  renderer.render(scene, camera);
 
-  /*depth render is still getting errors but works??
-  camera2.position.x = camera.position.x;
-  camera2.position.y = camera.position.y;
-  camera2.position.z = camera.position.z;
-  camera2.rotation.x = camera.rotation.x;
-  camera2.rotation.y = camera.rotation.y;
-  camera2.rotation.z = camera.rotation.z;
+  renderer.setRenderTarget( depthRenderTarget );
+  renderer.render( scene, camera );
 
-
-  renderer.setRenderTarget(depthRenderTarget);
-  renderer.render(scene, camera);
-
-  renderer.setRenderTarget(null);
-  renderer.render(scene, camera);
-  */
+  renderer.setRenderTarget( null );
+  renderer.render( postScene, postCamera );
 
 }
 Update();
@@ -271,7 +254,15 @@ function CustomControlKeys()
   {
     if(isShiftLKeyPressed)
     {
-      speed = 200;
+      
+      if(speed<= 200)
+      {
+        speed += 100 * deltaTime;
+        if(speed <= 20)
+        {
+          speed = 20;
+        }
+      }
     }
     else
     {
