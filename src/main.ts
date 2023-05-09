@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import "./style.css"
-import { isWKeyPressed, isAKeyPressed, isSKeyPressed, isDKeyPressed, mousePressed, customMouseEvents, isCTRLLKeyPressed, isSpaceKeyPressed, isShiftLKeyPressed } from './keycodes.ts';
+import { CustomControlKeys } from './keycodes.ts';
 import { CustomWaterPlane, WaterShaderMaterial } from './WaterShader.ts';
 import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
 import 'three/src/math/MathUtils.js';
-import { depthRenderTarget, postScene, postCamera } from './depthTarget.ts';
-
+import { depthRenderTarget, postScene, postCamera, depthMaterial } from './depthTarget.ts';
+import {AboutButtonHandler} from './TextHandling.ts';
+AboutButtonHandler();
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
-
 // Create a scene
 const scene = new THREE.Scene();
 const sizes = {
@@ -16,7 +16,7 @@ const sizes = {
   width: window.innerWidth
 }
 const worldOrigin = new THREE.Vector3(0,0,0);
-const worldCamOrigin = new THREE.Vector3(0,0,5);
+
 // Create a camera
 const camera = new THREE.PerspectiveCamera(
   75, // Field of view
@@ -25,7 +25,8 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 );
 
-
+depthMaterial.uniforms.camFar.value = camera.far * 0.01;
+depthMaterial.uniforms.camNear.value = camera.near;
 
 //https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
 //https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
@@ -114,15 +115,7 @@ scene.add(CustomSkyboxMesh());
 
 //Controls
 //const controls = new OrbitControls(camera, renderer.domElement);
-let lastRot = {
-  x: 0,
-  y: 0
-};
-let currentRot = {
-  x: 0,
-  y: 0
-};
-let speed:number = 10;
+
 
 let deltaTime:number = 0;
 let a:number = 0;
@@ -135,14 +128,11 @@ function FPSHandler()
   fpsText.innerText = `FPS: ${fps.toFixed(0)}`;
 }
 
-
-
-const titleText = document.querySelector(".title") as HTMLElement;
 // Render the scene & Update Loop
 function Update() {
   deltaTime = clock.getDelta();
   requestAnimationFrame(Update);
-  CustomControlKeys();
+  CustomControlKeys(camera,deltaTime);
   TimeVarForShaders();
   material.color.setRGB(
     THREE.MathUtils.lerp(0,1,sinTime01(2,0.5,1.5)),
@@ -172,8 +162,8 @@ function Update() {
   renderer.render( scene, camera );
 
   renderer.setRenderTarget( null );
-  //renderer.render( scene, camera );
-  renderer.render( postScene, postCamera ); //uncomment this line to see the grayscale
+  renderer.render( scene, camera );
+  //renderer.render( postScene, postCamera ); //uncomment this line to see the grayscale
 
 }
 Update();
@@ -191,121 +181,12 @@ function TimeVarForShaders()
   WaterShaderMaterial.uniforms.u_time.value = uniformData.time.value
 }
 
-function CustomControlKeys()
-{
-  if(mousePressed)
-  {
-    if(isShiftLKeyPressed)
-    {
-      if(speed<= 200)
-      {
-        if(speed <= 50)
-        {
-          speed = 50;
-        }
-        speed += 100 * deltaTime;    
-      }
-    }
-    else
-    {
-      speed = 10;
-    }
-    if(isWKeyPressed)
-    {
-      camera.translateZ(-1 * speed * deltaTime);
-    }
-    if(isAKeyPressed)
-    {
-      camera.translateX(-1 * speed * deltaTime);
-    }
-    if(isSKeyPressed)
-    {
-      camera.translateZ(+1 * speed * deltaTime);
-    }
-    if(isDKeyPressed)
-    {
-      camera.translateX(+1 * speed * deltaTime);
-    }
-    if(isCTRLLKeyPressed)
-    {
-      camera.translateY(-1 * (speed * 0.5 * deltaTime));
-    }
-    if(isSpaceKeyPressed)
-    {
-      camera.translateY(+1 * (speed * 0.5 * deltaTime));
-    }
 
-
-    
-    if(camera.position.distanceTo(worldCamOrigin) > 3)
-    {
-      
-      titleText.classList.add('fade-out');
-      titleText.classList.remove('fade-in');
-      
-    }
-    else
-    {
-      
-      titleText.classList.remove('fade-out');
-      titleText.classList.add('fade-in');
-      
-    }
-
-    
-
-    currentRot.x = -((customMouseEvents.x - customMouseEvents.startX)*0.001) * 2;
-    currentRot.y = -((customMouseEvents.y - customMouseEvents.startY)*0.001) * 2;
-    camera.rotation.y = (currentRot.x + lastRot.x);
-    camera.rotation.x = (currentRot.y + lastRot.y);
-    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x,-(Math.PI * 0.5),Math.PI * 0.5);
-
-    //console.log(Math.round(THREE.MathUtils.RAD2DEG * camera.rotation.x));
-  }
-}
-
-  window.addEventListener("mouseup", () => (
-  lastRot.x = camera.rotation.y,
-  lastRot.y = camera.rotation.x
-  ));
-
-  let isShowingBio:boolean = true;
-  const exploreText = document.getElementById("clickable-text")as HTMLElement;
-  const hiddenText = document.getElementById("hidden-text") as HTMLElement;
-  const titleBioText = document.querySelector(".titlebio") as HTMLElement;
-    const aboutStr:string = "Hi there! I'm Juma Al Remeithi, a developer that specializes on Games, Websites, & Graphics. I have been playing games for a very long time (over 10k hours in-game time) & decided to make it my passion. My dream is to work in anything graphics related such as Shaders, Graphics Specializations, Rendering Topics, & etc. This is essentially my biggest dream to work & specialize in the graphics space. Check out my github by clicking the github logo at the top if you're interested in my on-going projects!";
-  
-    exploreText.addEventListener("click", function() {
-      if(isShowingBio)
-      {
-        fadeOutInText(aboutStr,hiddenText);
-      }
-      else
-      {
-        fadeOutText(aboutStr,hiddenText);
-      }
-      isShowingBio = !isShowingBio;
-  });
-
-  function fadeOutInText(newText:string,textParam:HTMLElement): void {
-    textParam.style.opacity = "0";
-    setTimeout(function() {
-      textParam.textContent = newText;
-      textParam.style.opacity = "1";
-    }, 200);
-  }
-
-  function fadeOutText(newText:string,textParam:HTMLElement): void {
-    textParam.style.opacity = "1";
-    setTimeout(function() {
-      textParam.textContent = newText;
-      textParam.style.opacity = "0";
-    }, 200);
-  }
 
 
 //renderer.render(scene,camera);
 export {
   scene,
-  uniformData
+  uniformData,
+  camera
 }
