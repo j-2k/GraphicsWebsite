@@ -2,6 +2,7 @@
 Website that is mainly contained with graphics mainly powered by Typescript &amp; ThreeJS. This is mainly just a fun project to fiddle around with TypeScript &amp; Graphics. I might make it another portfolio site but im not sure yet. I'm also going to use the projects displayed on the [threejs](https://threejs.org/) website for reference.  
 Check out some of the images & the WIP stuff going on with the website below.  
 #### Home View
+*Features camera control movement also for fun*
 ![May-08-2023 07-53-24](https://user-images.githubusercontent.com/52252068/236730254-c9ba816e-17a9-4e36-9095-236bdf4575db.gif)
 #### Depth View
 *for shaders primarily, looks cool too*
