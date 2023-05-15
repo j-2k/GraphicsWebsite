@@ -17,7 +17,7 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
         distTexture1: {value: distortionTex},
         w_heightX: { value: 1.2},
         w_heightY: { value: 1.55},
-        distortionStrength: {value: 0.22},
+        distortionStrength: {value: .1},
         d_col: { value: new THREE.Color(0x180099) },
         s_col: { value: new THREE.Color(0x0033ee) },
     },
@@ -30,7 +30,7 @@ const WaterShaderMaterial = new THREE.ShaderMaterial({
     blendSrcAlpha: THREE.OneMinusSrcAlphaFactor,
     blendDstAlpha: THREE.SrcAlphaFactor,*/
     side: THREE.FrontSide,
-    transparent: false,
+    transparent: true,
     fog: true
 });
 

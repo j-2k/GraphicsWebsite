@@ -9,6 +9,16 @@ import {AboutButtonHandler} from './TextHandling.ts';
 AboutButtonHandler();
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
+
+//Resizing
+window.addEventListener('resize', () => {
+  sizes.height = window.innerHeight
+  sizes.width = window.innerWidth
+
+  camera.aspect = sizes.width/sizes.height
+  camera.updateProjectionMatrix()
+  renderer.setSize(sizes.width,sizes.height)
+})
 // Create a scene
 const scene = new THREE.Scene();
 const sizes = {
@@ -84,15 +94,7 @@ line.material.opacity = true;
 scene.add(line);
 scene.add(camera);
 
-//Resizing
-window.addEventListener('resize', () => {
-  sizes.height = window.innerHeight
-  sizes.width = window.innerWidth
 
-  camera.aspect = sizes.width/sizes.height
-  camera.updateProjectionMatrix()
-  renderer.setSize(sizes.width,sizes.height)
-})
 /*
 const loop = () => {
   sphereMesh.position.x += 0.01;
