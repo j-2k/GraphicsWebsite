@@ -4,11 +4,10 @@ import { CustomControlKeys } from './keycodes.ts';
 import { CustomWaterPlane, WaterShaderMaterial } from './WaterShader.ts';
 import { CustomSkyboxMesh, skyboxMaterial } from './SkyboxShader.ts';
 import 'three/src/math/MathUtils.js';
-import { depthRenderTarget, postScene, postCamera, depthMaterial } from './depthTarget.ts';
+import * as DepthInfo from './depthTarget.ts';
 import {AboutButtonHandler} from './TextHandling.ts';
 AboutButtonHandler();
-import { AllGameObjects } from './GameObjects.ts';
-AllGameObjects.test();
+import * as AllGameObjects from './GameObjects.ts';
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { gsap } from "gsap";
 
@@ -37,8 +36,8 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 );
 
-depthMaterial.uniforms.camFar.value = camera.far * 0.01;
-depthMaterial.uniforms.camNear.value = camera.near;
+DepthInfo.depthMaterial.uniforms.camFar.value = camera.far * 0.01;
+DepthInfo.depthMaterial.uniforms.camNear.value = camera.near;
 
 //https://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
 //https://stackoverflow.com/questions/42569465/3d-camera-x-axis-rotation
@@ -129,12 +128,12 @@ function Update() {
   AllGameObjects.Mats.line.rotation.z += 0.02;
   
 
-  renderer.setRenderTarget( depthRenderTarget );
+  renderer.setRenderTarget( DepthInfo.depthRenderTarget );
   renderer.render( scene, camera );
 
   renderer.setRenderTarget( null );
   renderer.render( scene, camera );
-  //renderer.render( postScene, postCamera ); //uncomment this line to see the grayscale
+  //renderer.render( DepthInfo.postScene, DepthInfo.postCamera ); //uncomment this line to see the grayscale
 
 }
 Update();

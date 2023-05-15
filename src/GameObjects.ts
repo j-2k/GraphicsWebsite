@@ -37,12 +37,6 @@ line.material.opacity = true;
 
 DebugGameObjects.push(line);
 
-function test()
-{
-    console.log(GameObjects + " Hello");
-    console.log(DebugGameObjects);
-}
-
 const Mats = {
     material,
     line,
@@ -52,6 +46,7 @@ const Mats = {
 //i thought this would be a good idea to just export 1 thing & reference from it,
 //but now I think its just better to export individual stuff... not sure yet,
 //new to typescript & its "good practises", i guess it would depend on the # of things im exporting...
+/*
 const AllGameObjects = {
     GameObjects,
     DebugGameObjects,
@@ -60,7 +55,23 @@ const AllGameObjects = {
 }
 
 
+//realized you can do this in importing by default by doing the following thanks gpt.
+import * as myModule from "./myModule";
 
+const person = new myModule.Person("Alice", 25);
+myModule.sayHello(person.name);
+console.log(`PI is approximately ${myModule.PI}.`);
+*/
+
+
+/*
 export {
     AllGameObjects
+}
+*/
+
+export {
+    GameObjects,
+    DebugGameObjects,
+    Mats
 }
