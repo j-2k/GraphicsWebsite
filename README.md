@@ -1,3 +1,6 @@
+# Mentioning Progress
+I might not have finished this project however, it was a great learning experience with threejs & general frontend development.
+
 # GraphicsWebsite
 Website that is mainly contained with graphics mainly powered by Typescript &amp; ThreeJS. This is mainly just a fun project to fiddle around with TypeScript &amp; Graphics. I might make it another portfolio site but im not sure yet. I'm also going to use the projects displayed on the [threejs](https://threejs.org/) website for reference.  
 Check out some of the images & the WIP stuff going on with the website below.  
